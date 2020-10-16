@@ -8,7 +8,12 @@ var img = ["img/kostka1.png" , "img/kostka2.png", "img/kostka3.png", "img/kostka
 var i = 0;
 var hod;
 var hody = [];
-//let prumer = prumer();
+var timer = false;
+
+function animace(){
+    hod = randomNumber();
+    cube.src = img[hod - 1];
+}
 
 function randomNumber(min = 0, max = 6) {
     return Math.ceil(Math.random()*(max - min)+min);
@@ -18,14 +23,21 @@ btn2.addEventListener("click",function(){
     hod = 0;
     hody = [];
     statistic();
+    cube.src = "img/wait.png";
     console.log(prumer);
 });
 
 btn1.addEventListener('click', function(){
-    hod = randomNumber();
-    hody.push(hod);
-    cube.src = img[hod - 1];
-    statistic(maximum(), minimum());
+    if (!timer){
+        timer = setInterval(animace, 50)
+        btn1.innerHTML = "Stop";
+    }else {
+        clearInterval(timer);
+        timer = false;
+        btn1.innerHTML = "Play";
+        hody.push(hod);
+        statistic(maximum(), minimum());
+    }
 });
 function maximum(){
     let max = 1 
@@ -62,4 +74,7 @@ function statistic(max = 0, min = 0) {
     stat2.innerHTML += `<p>Průměr: ${prumer().toFixed(2)}</p>`;
     stat3.innerHTML = `<p>Maximum: ${max}</p>`;
     stat3.innerHTML += `<p>Minimum: ${min} </p>`;
+    if(hod == 6){
+        alert("Hodil si největší možné číslo!");
+    }
 }
